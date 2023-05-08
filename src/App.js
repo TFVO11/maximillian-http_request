@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
+import { useCallback } from 'react';
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // useEffect( () => {
-  //   fetchMoviesHandler()
-  // }, [fetchMoviesHandler]);
-
-
-  async function fetchMoviesHandler() {
+  const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -22,7 +18,7 @@ function App() {
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
-            
+    
       const data = await response.json();
 
       const transformedMovies = data.results.map(movieData => {
@@ -40,7 +36,9 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  
 
   let content = <p>Found no movies.</p>
 
